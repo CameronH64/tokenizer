@@ -26,10 +26,10 @@ PSEUDOCODE:
 
 """
 
-
-whileSpaceandCommentsDictionary = { 'WSaC': ['//', '/*', '*/', '/**'] }
-symbolsDictionary = { 'symbols': ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>'] }
-reservedWordsDictionary = { 'reservedWords': ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static', 'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this'] }
+# Use a for loop in all of these.
+whileSpaceandComments = ['//', '/*', '*/', '/**']
+symbols = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
+reservedWords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static', 'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
 # The constants and identifiers tokens don't need a dictionary; they can be calculated.
 
 
@@ -50,12 +50,15 @@ def identify_token(lexeme):
 
 def write_token(token):
 
+def check_lexeme(word):
+
+
 
 def read_lexeme():
 
     currentLexeme = ""          # Start with an empty lexeme.
 
-    while 1:
+    while True:
 
         # read character by character.
         char = file.read(1)
@@ -63,6 +66,8 @@ def read_lexeme():
             break
 
         currentLexeme = currentLexeme + char  # Concatenate the just-read char to the end of the file.
+
+        # Check if lexeme.
 
         digit = currentLexeme[0].isdigit()
 
