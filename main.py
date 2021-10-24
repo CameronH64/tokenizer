@@ -26,78 +26,84 @@ PSEUDOCODE:
 
 """
 
-# Use a for loop in all of these.
-whileSpaceandComments = ['//', '/*', '*/', '/**']
-symbols = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
-reservedWords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static', 'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
-# The constants and identifiers tokens don't need a dictionary; they can be calculated.
-
-
-# Character read code adapted from GeeksforGeeks:
+# Character read code learned and adapted from these sites:
 # https://www.geeksforgeeks.org/python-program-to-read-character-by-character-from-a-file/
+# https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files
 
 
-def identify_token(lexeme):
+# Some setup
+whiteList = ['//', '/*', '*/', '/**', ' ', '\n']
+symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
+reservedList = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
+                 'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
+# stringConstants need to be interpreted as-is.
+# integerConstants need to be interpreted as-is.
+# Boolean... need to choose.
+# identifiers need to be differentiated with integerConstants; difference is _.
 
-    """Once the lexeme is found, its token needs to be identified."""
+listOfTokens = []           # Insert tokens when lexeme is identified. Then, create new file, and output it all. Don't forget newlines.
+                            # Note to future self: May try to append them all, then append the last </token> tag.
 
-    # If lexeme equals [token] return [token]
-    # else if ...
-
-    # Or use multiple for loops, checking the lexeme in each dictionary.
-
-    # Need to have one for comments, but DON'T write to the .xml file.
-
-def write_token(token):
-
-def check_lexeme(word):
-
-
-
-def read_lexeme():
-
-    currentLexeme = ""          # Start with an empty lexeme.
-
-    while True:
-
-        # read character by character.
-        char = file.read(1)
-        if not char:  # If you reach the end of the file, break out of the loop.
-            break
-
-        currentLexeme = currentLexeme + char  # Concatenate the just-read char to the end of the file.
-
-        # Check if lexeme.
-
-        digit = currentLexeme[0].isdigit()
-
-        if digit:
-            continue
-        else:
-
-        # Do an identify_lexeme here somewhere.
-
-        currentLexeme = ""      # Reset the currentLexeme.
-
-        return lexeme
-
-
-
-################## Code Execution Start
-
-file = open('Main.jack', 'r')           # Open file in read mode.
-
+filePosition = 1
 endOfFile = False
 
+whiteOrSymbol = False
+
+# Determining and tokenizing lexemes.
+
+# NOTE: Need to find way to append to currentLexeme (done) AND use just the most recent character. Step through code.
+
 while not endOfFile:
-    read_lexeme()
+    with open('Main.jack', 'r') as file:            # Open file in read mode.
+        read_data = file.read(filePosition)         # Read a single character in the file.
+        currentLexeme = str(read_data)              # The reason the file can be opened so many times is because
+                                                    # the file position is always being properly updated.
+    # Check if lexeme (7 tokens total)
+
+    if currentLexeme in symbolsList:                   # Could be a symbol or comment. Need to check here.
+
+        if currentLexeme in whiteList:                 # TOKEN: Check if it's a comment or white space.
+            print("Comment.")
+            print(str(read_data))
+            filePosition += 1
+            continue
+
+        elif currentLexeme in symbolsList:             # TOKEN: MUST be a symbol, since wasn't in whiteList list.
+            print("Confirmed to be a symbol.")
+            print(str(read_data))
+
+            # Do whatever, since it's confirmed a symbol.
+            filePosition += 1
+            continue
+
+    elif currentLexeme == "\"":                        # TOKEN: MUST be an integerString.
+        print("Probably a stringConstant.")
+        print(str(read_data))
+        filePosition += 1
+        continue
+
+    else:                                               # No lexeme found; go to next iteration.
+        filePosition += 1
+        continue
+
+
+    # break                                           # Break out of while loop.
+
+exit()
 
 
 
-file.close()
 
+# List of tokens:
 
+# White space and tokens (not outputted, so doesn't count.
+# <keyword>
+# <identifier>
+# <symbol>
+# <stringConstant>
+# <integerConstant>
 
-
-
-
+# (Not in .xml example output)
+# <booleanConstant>
+# <null>        ?
+#
