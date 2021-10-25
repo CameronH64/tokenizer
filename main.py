@@ -3,12 +3,6 @@
 
 """
 
-Four tokens:
-symbols
-reserved words
-constants
-identifiers
-
 PSEUDOCODE:
 
     Read character by character
@@ -29,13 +23,9 @@ PSEUDOCODE:
 # Character read code learned and adapted from these sites:
 # https://www.geeksforgeeks.org/python-program-to-read-character-by-character-from-a-file/
 # https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files
+# https://www.quora.com/How-do-you-check-for-end-of-file-in-Python
 
 
-# Some setup
-whiteList = ['//', '/*', '*/', '/**', ' ', '\n']
-symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
-reservedList = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
-                 'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
 # stringConstants need to be interpreted as-is.
 # integerConstants need to be interpreted as-is.
 # Boolean... need to choose.
@@ -44,51 +34,56 @@ reservedList = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 
 listOfTokens = []           # Insert tokens when lexeme is identified. Then, create new file, and output it all. Don't forget newlines.
                             # Note to future self: May try to append them all, then append the last </token> tag.
 
-filePosition = 1
-endOfFile = False
+whiteList = ['//', '/*', '*/', '/**', ' ', '\n']
+symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
+reservedList = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
+                 'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
+lookAhead = ["/", "*"]
 
-whiteOrSymbol = False
+position = 0
+lexemeBuffer = ""
+eof = False
+charCheck = 1
 
 # Determining and tokenizing lexemes.
 
 # NOTE: Need to find way to append to currentLexeme (done) AND use just the most recent character. Step through code.
 
-while not endOfFile:
-    with open('Main.jack', 'r') as file:            # Open file in read mode.
-        read_data = file.read(filePosition)         # Read a single character in the file.
-        currentLexeme = str(read_data)              # The reason the file can be opened so many times is because
-                                                    # the file position is always being properly updated.
-    # Check if lexeme (7 tokens total)
+f = open("Main.jack")
+jackText = f.read()
 
-    if currentLexeme in symbolsList:                   # Could be a symbol or comment. Need to check here.
+while eof is False:          # While you haven't reached the end of the file.
 
-        if currentLexeme in whiteList:                 # TOKEN: Check if it's a comment or white space.
-            print("Comment.")
-            print(str(read_data))
-            filePosition += 1
-            continue
+    # Now, I can utilize jackText, since it has all of the characters in it.
+    # Be sure to have line of code that makes eof valid. Probably eof = None.
 
-        elif currentLexeme in symbolsList:             # TOKEN: MUST be a symbol, since wasn't in whiteList list.
-            print("Confirmed to be a symbol.")
-            print(str(read_data))
+    lexemeBuffer = lexemeBuffer + jackText[position + 1]   # Append to the currentLexeme so the currentLexeme can be checked.
 
-            # Do whatever, since it's confirmed a symbol.
-            filePosition += 1
-            continue
+    # Check if lexeme (5 tokens total)
 
-    elif currentLexeme == "\"":                        # TOKEN: MUST be an integerString.
-        print("Probably a stringConstant.")
-        print(str(read_data))
-        filePosition += 1
-        continue
+    if jackText[position] == "/":                   # Could be a symbol or comment. Likely symbol.
+
+        if jackText[position + 1] == "/":                 # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
+            print("single line comment")
+
+            while jackText[position + 1] != "\n":       # Go to the end of the line, ignoring every character.
+                print("single line comment " + str(position))
+                position += 1
+
+            # position += 1       # One extra increment to get to the next line.
+            lexemeBuffer = ""
+
+    if lexemeBuffer == "\"":                         # TOKEN: MUST be an integerString.
+        print("<stringConstant>")
+        position += 1
 
     else:                                               # No lexeme found; go to next iteration.
-        filePosition += 1
-        continue
+        position += 1
+
+    # eof = True
 
 
-    # break                                           # Break out of while loop.
-
+print("Exiting now...")
 exit()
 
 
