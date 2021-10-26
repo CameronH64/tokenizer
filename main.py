@@ -40,10 +40,12 @@ reservedList = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 
                  'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
 lookAhead = ["/", "*"]
 
+charCheck = 1
+
+eof = False
 position = 0
 lexemeBuffer = ""
-eof = False
-charCheck = 1
+
 
 # Determining and tokenizing lexemes.
 
@@ -52,39 +54,59 @@ charCheck = 1
 f = open("Main.jack")
 jackText = f.read()
 
-while eof is False:          # While you haven't reached the end of the file.
+while position < len(jackText):          # While you haven't reached the end of the file.
 
     # Now, I can utilize jackText, since it has all of the characters in it.
     # Be sure to have line of code that makes eof valid. Probably eof = None.
 
-    lexemeBuffer = lexemeBuffer + jackText[position + 1]   # Append to the currentLexeme so the currentLexeme can be checked.
+    position += 1                           # Load the next character into the lexemeBuffer.
+    lexemeBuffer += jackText[position]      # Append to the currentLexeme so the currentLexeme can be checked.
 
     # Check if lexeme (5 tokens total)
 
-    if jackText[position] == "/":                   # Could be a symbol or comment. Likely symbol.
+    # Check if a comment.
+    if lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, or division operator.
 
-        if jackText[position + 1] == "/":                 # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
+        # position += 1  # Load the next character into the lexemeBuffer.
+        lexemeBuffer += jackText[position]  # Append to the currentLexeme so the currentLexeme can be checked.
+
+        # Check if single line.
+        if lexemeBuffer.endswith("/"):                  # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
             print("single line comment")
 
-            while jackText[position + 1] != "\n":       # Go to the end of the line, ignoring every character.
-                print("single line comment " + str(position))
+            while not lexemeBuffer.endswith("\n"):
+                lexemeBuffer += jackText[position]
                 position += 1
+            lexemeBuffer = ""
+            continue
+
+        # Check if multi-line.
+        elif lexemeBuffer.endswith("*"):              # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
+            print("multi-line comment " + str(position))
+
+            position = 0
 
             # position += 1       # One extra increment to get to the next line.
-            lexemeBuffer = ""
+            # lexemeBuffer = ""
 
-    if lexemeBuffer == "\"":                         # TOKEN: MUST be an integerString.
+        else:                # Else if not / or *.
+            position = 0
+            continue
+
+        lexemeBuffer = ""
+
+
+    if lexemeBuffer[0] == "\"":                         # TOKEN: MUST be an integerString.
         print("<stringConstant>")
         position += 1
 
     else:                                               # No lexeme found; go to next iteration.
         position += 1
 
-    # eof = True
-
 
 print("Exiting now...")
 exit()
+
 
 
 
