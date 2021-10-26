@@ -68,7 +68,7 @@ while position < len(jackText):          # While you haven't reached the end of 
     if lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, or division operator.
 
         # position += 1  # Load the next character into the lexemeBuffer.
-        lexemeBuffer += jackText[position]  # Append to the currentLexeme so the currentLexeme can be checked.
+        # lexemeBuffer += jackText[position]  # Append to the currentLexeme so the currentLexeme can be checked.
 
         # Check if single line.
         if lexemeBuffer.endswith("/"):                  # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
