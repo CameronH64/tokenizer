@@ -61,7 +61,11 @@ while position < len(jackText):          # While you haven't reached the end of 
     position += 1                           # Load the next character into the lexemeBuffer.
     lexemeBuffer += jackText[position]      # Append to the currentLexeme so the currentLexeme can be checked.
 
-    if lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, OR division operator.
+    if lexemeBuffer == "\n":
+        position += 1
+        continue
+
+    elif lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, OR division operator.
 
         # Check if single line.
         if lexemeBuffer.endswith("/") and jackText[position + 1] != "*":                 # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
@@ -80,7 +84,7 @@ while position < len(jackText):          # While you haven't reached the end of 
             while not lexemeBuffer.endswith("*/"):
                 lexemeBuffer += jackText[position - 1]
                 position += 1
-            position -= 1
+            # position -= 1
             lexemeBuffer = ""
             continue
 
@@ -96,7 +100,7 @@ while position < len(jackText):          # While you haven't reached the end of 
         lexemeBuffer = ""
         continue
 
-    elif lexemeBuffer[0] == "\"":                                               # No lexeme found; go to next iteration.
+    elif lexemeBuffer == "\"":                                               # No lexeme found; go to next iteration.
         # A string constant has been detected!
 
         print("<integerConstant>")
@@ -118,7 +122,7 @@ while position < len(jackText):          # While you haven't reached the end of 
     # Detect nothing
     else:
         position += 1
-        lexemeBuffer = ""
+
 
     continue
 
