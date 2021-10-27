@@ -37,9 +37,10 @@ listOfTokens = []           # Insert tokens when lexeme is identified. Then, cre
 whiteList = ['//', '/*', '*/', '/**', ' ', '\n']
 symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
 keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
-                 'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
+            'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
 lookAhead = ["/", "*"]
 digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
 
 charCheck = 1
 
@@ -60,8 +61,7 @@ while position < len(jackText):          # While you haven't reached the end of 
     position += 1                           # Load the next character into the lexemeBuffer.
     lexemeBuffer += jackText[position]      # Append to the currentLexeme so the currentLexeme can be checked.
 
-    # Check if a comment.
-    if lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, or division operator.
+    if lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, OR division operator.
 
         # Check if single line.
         if lexemeBuffer.endswith("/") and jackText[position + 1] != "*":                 # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
@@ -73,37 +73,39 @@ while position < len(jackText):          # While you haven't reached the end of 
             lexemeBuffer = ""
             continue
 
-    # Check if multi-line.
-    elif jackText[position + 1] == "*":              # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
-        print("multi-line comment")
+        # Check if multi-line.
+        elif jackText[position + 1] == "*":              # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
+            print("multi-line comment")
 
-        while not lexemeBuffer.endswith("*/"):
-            lexemeBuffer += jackText[position]
+            while not lexemeBuffer.endswith("*/"):
+                lexemeBuffer += jackText[position - 1]
+                position += 1
+            lexemeBuffer = ""
+            continue
+
+        # MUST be division symbol
+        else:
+            print("<symbol>")
             position += 1
-        lexemeBuffer = ""
-        continue
+            lexemeBuffer = ""
 
-    # Detect keyword
     elif lexemeBuffer in keywords:                         # TOKEN: MUST be an integerString.
         print("<keyword>")
         position += 1
         lexemeBuffer = ""
         continue
 
-    # Detect stringConstant
     elif lexemeBuffer[0] == "\"":                                               # No lexeme found; go to next iteration.
-
         # A string constant has been detected!
 
         print("<integerConstant>")
 
-        while not lexemeBuffer.endswith("\""):
+        if lexemeBuffer.endswith("\""):
             lexemeBuffer += jackText[position]
             position += 1
         lexemeBuffer = ""
         continue
 
-    # Detect integerConstant
     elif lexemeBuffer in digits:
         print("<integerConstant>")
 
@@ -112,13 +114,21 @@ while position < len(jackText):          # While you haven't reached the end of 
             position += 1
         lexemeBuffer = ""
 
-    # Detect identifier
-    elif lexemeBuffer[0] == letter or number or _:
+    elif lexemeBuffer[0].isalpha() or "_":
+        print("<identifier>")
 
-        while lexemeBuffer[-1] not in digits:
+        while lexemeBuffer[-1].isalpha() or "_":
             lexemeBuffer += jackText[position]
             position += 1
         lexemeBuffer = ""
+
+    # Detect nothing
+    else:
+        position += 1
+        lexemeBuffer = ""
+
+    continue
+
 
 
 
