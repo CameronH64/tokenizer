@@ -80,6 +80,7 @@ while position < len(jackText):          # While you haven't reached the end of 
             while not lexemeBuffer.endswith("*/"):
                 lexemeBuffer += jackText[position - 1]
                 position += 1
+            position -= 1
             lexemeBuffer = ""
             continue
 
@@ -87,7 +88,7 @@ while position < len(jackText):          # While you haven't reached the end of 
         else:
             print("<symbol>")
             position += 1
-            lexemeBuffer = ""
+        lexemeBuffer = ""
 
     elif lexemeBuffer in keywords:                         # TOKEN: MUST be an integerString.
         print("<keyword>")
@@ -110,14 +111,6 @@ while position < len(jackText):          # While you haven't reached the end of 
         print("<integerConstant>")
 
         while lexemeBuffer[-1] not in digits:
-            lexemeBuffer += jackText[position]
-            position += 1
-        lexemeBuffer = ""
-
-    elif lexemeBuffer[0].isalpha() or "_":
-        print("<identifier>")
-
-        while lexemeBuffer[-1].isalpha() or "_":
             lexemeBuffer += jackText[position]
             position += 1
         lexemeBuffer = ""
