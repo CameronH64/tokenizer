@@ -56,19 +56,11 @@ jackText = f.read()
 
 while position < len(jackText):          # While you haven't reached the end of the file.
 
-    # Now, I can utilize jackText, since it has all of the characters in it.
-    # Be sure to have line of code that makes eof valid. Probably eof = None.
-
     position += 1                           # Load the next character into the lexemeBuffer.
     lexemeBuffer += jackText[position]      # Append to the currentLexeme so the currentLexeme can be checked.
 
-    # Check if lexeme (5 tokens total)
-
     # Check if a comment.
     if lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, or division operator.
-
-        # position += 1  # Load the next character into the lexemeBuffer.
-        # lexemeBuffer += jackText[position]  # Append to the currentLexeme so the currentLexeme can be checked.
 
         # Check if single line.
         if lexemeBuffer.endswith("/"):                  # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
@@ -85,9 +77,6 @@ while position < len(jackText):          # While you haven't reached the end of 
             print("multi-line comment " + str(position))
 
             position = 0
-
-            # position += 1       # One extra increment to get to the next line.
-            # lexemeBuffer = ""
 
         else:                # Else if not / or *.
             position = 0
