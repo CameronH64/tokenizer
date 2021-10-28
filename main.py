@@ -33,8 +33,8 @@ keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'cha
 position = 0
 lexemeBuffer = ""
 
-f = open("Main.jack")
-# f = open("SquareGame.jack")
+# f = open("Main.jack")
+f = open("SquareGame.jack")
 jackText = f.read()
 jackText += " "  # FOR DEBUGGING.
 
@@ -52,12 +52,12 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
 
 
-    elif lexemeBuffer[0] == "/":  # Can be a single line comment, multi-line comment, OR division operator.
+    elif lexemeBuffer == "/":  # Can be a single line comment, multi-line comment, OR division operator.
 
         # lexemeBuffer += jackText[position]
 
         # Check if single line comment.
-        if lexemeBuffer[0:1] == "/":
+        if jackText[position] == "/":
 
             while jackText[position + 1] != "\n":
                 lexemeBuffer += jackText[position]
@@ -65,7 +65,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer = ""
 
         # Check if multi-line comment.
-        elif lexemeBuffer[0:1] == "*":
+        elif jackText[position + 1] == "*":
 
             while not lexemeBuffer.endswith("*/"):
                 lexemeBuffer += jackText[position + 1]
@@ -73,7 +73,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer = ""
 
         # MUST be division symbol
-        elif lexemeBuffer[0:1] == " ":
+        elif jackText[position + 1] == " ":
             lexemeBuffer += jackText[position]
 
             print("<symbol> " + lexemeBuffer + " </symbol>")
