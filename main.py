@@ -142,6 +142,8 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             continue
         else:
             position += 1
+            lexemeBuffer = jackText[position]
+            print("<symbol> " + lexemeBuffer + " </symbol>")
             lexemeBuffer = ""
 
 
