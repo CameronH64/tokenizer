@@ -64,8 +64,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
     elif lexemeBuffer[0] == "/":  # Can be a single line comment, multi-line comment, OR division operator.
 
         # Check if single line.
-        if lexemeBuffer.endswith("/") and jackText[
-            position + 1] != "*":  # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
+        if lexemeBuffer.endswith("/") and jackText[position + 1] != "*":  # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
             # print("___(ignore) single line comment")
 
             while not lexemeBuffer.endswith("\n"):
@@ -75,8 +74,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             continue
 
         # Check if multi-line.
-        elif jackText[
-            position + 1] == "*":  # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
+        elif jackText[position + 1] == "*":  # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
             # print("___(ignore) multi-line comment")
 
             while not lexemeBuffer.endswith("*/"):
@@ -109,16 +107,19 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer = ""
 
 
-
     elif lexemeBuffer == "\"":
 
-        print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
+        position += 1       # Because we can't count the first quotation mark itself.
 
-        if lexemeBuffer.endswith("\""):
+        while jackText[position + 1] != "\"":
             lexemeBuffer += jackText[position]
             position += 1
 
+        # position -= 1
+        print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
+
         lexemeBuffer = ""
+
 
 
     elif lexemeBuffer[0].isdigit():
@@ -133,8 +134,13 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
     elif lexemeBuffer in symbolsList:
         print("<symbol> " + lexemeBuffer + " </symbol>")
-        position += 1
-        lexemeBuffer = ""
+
+        if jackText[position + 1] in symbolsList:
+            lexemeBuffer = ""
+            continue
+        else:
+            position += 1
+            lexemeBuffer = ""
 
 
 
@@ -147,9 +153,6 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
     # Detect nothing
     else:
         continue
-
-
-
 
 print("</tokens>")
 
