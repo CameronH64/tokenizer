@@ -124,12 +124,13 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
 
 
-    elif lexemeBuffer[0].isdigit():
-        print("<integerConstant> " + lexemeBuffer + " </integerConstant>")
+    elif lexemeBuffer.isdigit():
 
-        while not jackText[position + 1].isdigit():
+        while jackText[position + 1].isdigit():
             lexemeBuffer += jackText[position]
             position += 1
+
+        print("<integerConstant> " + lexemeBuffer + " </integerConstant>")
 
         lexemeBuffer = ""
 
@@ -159,7 +160,6 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
         continue
 
 print("</tokens>")
-
 exit()
 
 # List of tokens:
