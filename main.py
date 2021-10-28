@@ -54,22 +54,26 @@ lexemeBuffer = ""
 # NOTE: Need to find way to append to currentLexeme (done) AND use just the most recent character. Step through code.
 
 f = open("Main.jack")
+# f = open("SquareGame.jack")
 jackText = f.read()
+jackText += " "         # FOR DEBUGGING.
+
+print("<tokens>")
+
                 # len == 578 (I cut out text).
-while position < len(jackText):          # While you haven't reached the end of the file.
+while position < len(jackText) - 1:          # While you haven't reached the end of the file.
 
     position += 1                           # Load the next character into the lexemeBuffer.
     lexemeBuffer += jackText[position]      # Append to the currentLexeme so the currentLexeme can be checked.
 
     if lexemeBuffer == "\n":
-        position += 1
-        continue
+        lexemeBuffer = ""
 
     elif lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, OR division operator.
 
         # Check if single line.
         if lexemeBuffer.endswith("/") and jackText[position + 1] != "*":                 # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
-            print("single line comment")
+            print("___(ignore) single line comment")
 
             while not lexemeBuffer.endswith("\n"):
                 lexemeBuffer += jackText[position]
@@ -79,31 +83,42 @@ while position < len(jackText):          # While you haven't reached the end of 
 
         # Check if multi-line.
         elif jackText[position + 1] == "*":              # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
-            print("multi-line comment")
+            print("___(ignore) multi-line comment")
 
             while not lexemeBuffer.endswith("*/"):
-                lexemeBuffer += jackText[position - 1]
+                lexemeBuffer += jackText[position + 1]
                 position += 1
-            # position -= 1
             lexemeBuffer = ""
             continue
 
         # MUST be division symbol
         else:
-            print("<symbol>")
+            print("<symbol> " + str(jackText[position]) + " </symbol>")
             position += 1
         lexemeBuffer = ""
 
-    elif lexemeBuffer in keywords:                         # TOKEN: MUST be an integerString.
-        print("<keyword>")
+
+                                                                                # The more important lexemes to tokenize.
+
+    elif lexemeBuffer in keywords:
+        print("<keyword> " + lexemeBuffer + " </keyword>")
         position += 1
         lexemeBuffer = ""
         continue
 
-    elif lexemeBuffer == "\"":                                               # No lexeme found; go to next iteration.
+    elif lexemeBuffer.isalpha():
+        print("<identifier> " + lexemeBuffer + " </identifier>")
+
+        if jackText[position + 1].endswith(" "):
+            lexemeBuffer += jackText[position]
+            position += 1
+        lexemeBuffer = ""
+        continue
+
+    elif lexemeBuffer == "\"":
         # A string constant has been detected!
 
-        print("<integerConstant>")
+        print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
 
         if lexemeBuffer.endswith("\""):
             lexemeBuffer += jackText[position]
@@ -112,7 +127,7 @@ while position < len(jackText):          # While you haven't reached the end of 
         continue
 
     elif lexemeBuffer in digits:
-        print("<integerConstant>")
+        print("<integerConstant> " + lexemeBuffer + " </integerConstant>")
 
         while lexemeBuffer[-1] not in digits:
             lexemeBuffer += jackText[position]
@@ -121,15 +136,11 @@ while position < len(jackText):          # While you haven't reached the end of 
 
     # Detect nothing
     else:
-        position += 1
-
-
-    continue
+        continue
 
 
 
-
-print("Exiting now...")
+print("</tokens>")
 
 exit()
 
