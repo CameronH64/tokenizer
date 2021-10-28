@@ -29,18 +29,19 @@ PSEUDOCODE:
 symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
 keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
             'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
+special = ['&lt;', '&gt;', '&quot;', '&amp;']
+# Use dictionary for this?
 
 position = 0
 lexemeBuffer = ""
 
-# f = open("Main.jack")
-f = open("SquareGame.jack")
+f = open("Main.jack")
+# f = open("SquareGame.jack")
 jackText = f.read()
-jackText += " "  # FOR DEBUGGING.
+# jackText += " "  # FOR DEBUGGING.
 
 print("<tokens>")
 
-# len == 578 (I cut out text).
 while position < len(jackText) - 1:  # While you haven't reached the end of the file.
 
     position += 1  # Load the next character into the lexemeBuffer.
@@ -57,7 +58,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
         # lexemeBuffer += jackText[position]
 
         # Check if single line comment.
-        if jackText[position] == "/":
+        if jackText[position + 1] == "/":
 
             while jackText[position + 1] != "\n":
                 lexemeBuffer += jackText[position]
