@@ -116,7 +116,9 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer += jackText[position]
             position += 1
 
-        print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
+        position += 1
+        lexemeBuffer += jackText[position]
+        print("<stringConstant> " + lexemeBuffer[1:-1] + " </stringConstant>")
 
         lexemeBuffer = ""
 
