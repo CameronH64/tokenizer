@@ -107,6 +107,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer = ""
 
 
+
     elif lexemeBuffer == "\"":
 
         position += 1       # Because we can't count the first quotation mark itself.
@@ -115,7 +116,6 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer += jackText[position]
             position += 1
 
-        # position -= 1
         print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
 
         lexemeBuffer = ""
@@ -135,7 +135,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
     elif lexemeBuffer in symbolsList:
         print("<symbol> " + lexemeBuffer + " </symbol>")
 
-        if jackText[position + 1] in symbolsList:
+        if jackText[position + 1] not in symbolsList:
             lexemeBuffer = ""
             continue
         else:
