@@ -26,11 +26,6 @@ PSEUDOCODE:
 # https://www.quora.com/How-do-you-check-for-end-of-file-in-Python
 
 
-# stringConstants need to be interpreted as-is.
-# integerConstants need to be interpreted as-is.
-# Boolean... need to choose.
-# identifiers need to be differentiated with integerConstants; difference is _.
-
 symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
 keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
             'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
@@ -61,35 +56,40 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
     if lexemeBuffer == "\n":
         lexemeBuffer = ""
 
+
+
+
     elif lexemeBuffer[0] == "/":  # Can be a single line comment, multi-line comment, OR division operator.
 
-        # Check if single line.
-        if lexemeBuffer.endswith("/") and jackText[position + 1] != "*":  # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
-            # print("___(ignore) single line comment")
+        lexemeBuffer += jackText[position]
 
-            while not lexemeBuffer.endswith("\n"):
+        # Check if single line comment.
+        if lexemeBuffer[0:1] == "/":
+
+            while jackText[position + 1] != "\n":
                 lexemeBuffer += jackText[position]
                 position += 1
             lexemeBuffer = ""
-            continue
 
-        # Check if multi-line.
-        elif jackText[position + 1] == "*":  # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
-            # print("___(ignore) multi-line comment")
+        # Check if multi-line comment.
+        elif lexemeBuffer[0:1] == "*":
 
             while not lexemeBuffer.endswith("*/"):
                 lexemeBuffer += jackText[position + 1]
                 position += 1
             lexemeBuffer = ""
-            continue
 
         # MUST be division symbol
-        else:
+        elif lexemeBuffer[0:1] == " ":
+            lexemeBuffer += jackText[position + 1]
+
             print("<symbol> " + lexemeBuffer + " </symbol>")
             position += 1
         lexemeBuffer = ""
 
         # The more important lexemes to tokenize.
+
+
 
 
 
