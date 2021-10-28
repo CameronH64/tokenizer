@@ -35,8 +35,8 @@ special = ['&lt;', '&gt;', '&quot;', '&amp;']
 position = 0
 lexemeBuffer = ""
 
-# f = open("Main.jack")
-f = open("SquareGame.jack")
+f = open("Main.jack")
+# f = open("SquareGame.jack")
 jackText = f.read()
 # jackText += " "  # FOR DEBUGGING.
 
@@ -114,7 +114,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
         position += 1
         lexemeBuffer += jackText[position]
-        print("<stringConstant> " + lexemeBuffer[1:-1] + "  </stringConstant>")
+        print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
 
         lexemeBuffer = ""
 
@@ -138,8 +138,19 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer = ""
             continue
         else:
+
+            if lexemeBuffer == "<":
+                print("<symbol> &lt; </symbol>")
+            elif lexemeBuffer == ">":
+                print("<symbol> &gt; </symbol>")
+            elif lexemeBuffer == "\"":
+                print("<symbol> &quot; </symbol>")
+            elif lexemeBuffer == "&":
+                print("<symbol> &amp; </symbol>")
+
             position += 1
             lexemeBuffer = jackText[position]
+
             print("<symbol> " + lexemeBuffer + " </symbol>")
             lexemeBuffer = ""
 
