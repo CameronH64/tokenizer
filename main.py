@@ -31,23 +31,15 @@ PSEUDOCODE:
 # Boolean... need to choose.
 # identifiers need to be differentiated with integerConstants; difference is _.
 
-listOfTokens = []           # Insert tokens when lexeme is identified. Then, create new file, and output it all. Don't forget newlines.
-                            # Note to future self: May try to append them all, then append the last </token> tag.
-
-whiteList = ['//', '/*', '*/', '/**', ' ', '\n']
 symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
 keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
             'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
-lookAhead = ["/", "*"]
-digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
 
 charCheck = 1
 
 eof = False
 position = 0
 lexemeBuffer = ""
-
 
 # Determining and tokenizing lexemes.
 
@@ -56,24 +48,25 @@ lexemeBuffer = ""
 f = open("Main.jack")
 # f = open("SquareGame.jack")
 jackText = f.read()
-jackText += " "         # FOR DEBUGGING.
+jackText += " "  # FOR DEBUGGING.
 
 print("<tokens>")
 
-                # len == 578 (I cut out text).
-while position < len(jackText) - 1:          # While you haven't reached the end of the file.
+# len == 578 (I cut out text).
+while position < len(jackText) - 1:  # While you haven't reached the end of the file.
 
-    position += 1                           # Load the next character into the lexemeBuffer.
-    lexemeBuffer += jackText[position]      # Append to the currentLexeme so the currentLexeme can be checked.
+    position += 1  # Load the next character into the lexemeBuffer.
+    lexemeBuffer += jackText[position]  # Append to the currentLexeme so the currentLexeme can be checked.
 
     if lexemeBuffer == "\n":
         lexemeBuffer = ""
 
-    elif lexemeBuffer[0] == "/":                              # Can be a single line comment, multi-line comment, OR division operator.
+    elif lexemeBuffer[0] == "/":  # Can be a single line comment, multi-line comment, OR division operator.
 
         # Check if single line.
-        if lexemeBuffer.endswith("/") and jackText[position + 1] != "*":                 # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
-            print("___(ignore) single line comment")
+        if lexemeBuffer.endswith("/") and jackText[
+            position + 1] != "*":  # TOKEN: MUST be a single line comment. Read characters until end of LINE; clear lexemeBuffer.
+            # print("___(ignore) single line comment")
 
             while not lexemeBuffer.endswith("\n"):
                 lexemeBuffer += jackText[position]
@@ -82,8 +75,9 @@ while position < len(jackText) - 1:          # While you haven't reached the end
             continue
 
         # Check if multi-line.
-        elif jackText[position + 1] == "*":              # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
-            print("___(ignore) multi-line comment")
+        elif jackText[
+            position + 1] == "*":  # TOKEN: MUST be a multi-line line comment. Read characters until end of LINE; clear lexemeBuffer.
+            # print("___(ignore) multi-line comment")
 
             while not lexemeBuffer.endswith("*/"):
                 lexemeBuffer += jackText[position + 1]
@@ -93,45 +87,61 @@ while position < len(jackText) - 1:          # While you haven't reached the end
 
         # MUST be division symbol
         else:
-            print("<symbol> " + str(jackText[position]) + " </symbol>")
+            print("<symbol> " + lexemeBuffer + " </symbol>")
             position += 1
         lexemeBuffer = ""
 
+        # The more important lexemes to tokenize.
 
-                                                                                # The more important lexemes to tokenize.
 
-    elif lexemeBuffer in keywords:
-        print("<keyword> " + lexemeBuffer + " </keyword>")
-        position += 1
-        lexemeBuffer = ""
-        continue
 
-    elif lexemeBuffer.isalpha():
-        print("<identifier> " + lexemeBuffer + " </identifier>")
+    elif lexemeBuffer.isalpha() or lexemeBuffer == "_":
 
-        if jackText[position + 1].endswith(" "):
+        while jackText[position + 1] not in symbolsList and jackText[position + 1] != " ":
+            position += 1
             lexemeBuffer += jackText[position]
-            position += 1
-        lexemeBuffer = ""
-        continue
+
+        if lexemeBuffer in keywords:
+            print("<keyword> " + lexemeBuffer + " </keyword>")
+            lexemeBuffer = ""
+        else:
+            print("<identifier> " + lexemeBuffer + " </identifier>")
+            lexemeBuffer = ""
+
+
 
     elif lexemeBuffer == "\"":
-        # A string constant has been detected!
 
         print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
 
         if lexemeBuffer.endswith("\""):
             lexemeBuffer += jackText[position]
             position += 1
-        lexemeBuffer = ""
-        continue
 
-    elif lexemeBuffer in digits:
+        lexemeBuffer = ""
+
+
+    elif lexemeBuffer[0].isdigit():
         print("<integerConstant> " + lexemeBuffer + " </integerConstant>")
 
-        while lexemeBuffer[-1] not in digits:
+        while not jackText[position + 1].isdigit():
             lexemeBuffer += jackText[position]
             position += 1
+
+        lexemeBuffer = ""
+
+
+    elif lexemeBuffer in symbolsList:
+        print("<symbol> " + lexemeBuffer + " </symbol>")
+        position += 1
+        lexemeBuffer = ""
+
+
+
+    elif lexemeBuffer == " ":
+        lexemeBuffer = ""
+
+    elif lexemeBuffer == "\t":
         lexemeBuffer = ""
 
     # Detect nothing
@@ -140,13 +150,10 @@ while position < len(jackText) - 1:          # While you haven't reached the end
 
 
 
+
 print("</tokens>")
 
 exit()
-
-
-
-
 
 # List of tokens:
 
