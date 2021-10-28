@@ -30,15 +30,8 @@ symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', 
 keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
             'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
 
-charCheck = 1
-
-eof = False
 position = 0
 lexemeBuffer = ""
-
-# Determining and tokenizing lexemes.
-
-# NOTE: Need to find way to append to currentLexeme (done) AND use just the most recent character. Step through code.
 
 f = open("Main.jack")
 # f = open("SquareGame.jack")
@@ -61,7 +54,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
     elif lexemeBuffer[0] == "/":  # Can be a single line comment, multi-line comment, OR division operator.
 
-        lexemeBuffer += jackText[position]
+        # lexemeBuffer += jackText[position]
 
         # Check if single line comment.
         if lexemeBuffer[0:1] == "/":
@@ -81,17 +74,19 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
         # MUST be division symbol
         elif lexemeBuffer[0:1] == " ":
-            lexemeBuffer += jackText[position + 1]
+            lexemeBuffer += jackText[position]
 
             print("<symbol> " + lexemeBuffer + " </symbol>")
             position += 1
         lexemeBuffer = ""
 
+
+
+
+
+
+
         # The more important lexemes to tokenize.
-
-
-
-
 
     elif lexemeBuffer.isalpha() or lexemeBuffer == "_":
 
@@ -162,16 +157,3 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 print("</tokens>")
 exit()
 
-# List of tokens:
-
-# White space and tokens (not outputted, so doesn't count.
-# <keyword>
-# <identifier>
-# <symbol>
-# <stringConstant>
-# <integerConstant>
-
-# (Not in .xml example output)
-# <booleanConstant>
-# <null>        ?
-#
