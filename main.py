@@ -132,28 +132,26 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
 
     elif lexemeBuffer in symbolsList:
-        print("<symbol> " + lexemeBuffer + " </symbol>")
 
-        if jackText[position + 1] not in symbolsList:
-            lexemeBuffer = ""
-            continue
+        if lexemeBuffer == "<":
+            print("<symbol> &lt; </symbol>")
+
+
+        elif lexemeBuffer == ">":
+            print("<symbol> &gt; </symbol>")
+
+
+        elif lexemeBuffer == "\"":
+            print("<symbol> &quot; </symbol>")
+
+
+        elif lexemeBuffer == "&":
+            print("<symbol> &amp; </symbol>")
+
         else:
-
-            if lexemeBuffer == "<":
-                print("<symbol> &lt; </symbol>")
-            elif lexemeBuffer == ">":
-                print("<symbol> &gt; </symbol>")
-            elif lexemeBuffer == "\"":
-                print("<symbol> &quot; </symbol>")
-            elif lexemeBuffer == "&":
-                print("<symbol> &amp; </symbol>")
-
-            position += 1
-            lexemeBuffer = jackText[position]
-
             print("<symbol> " + lexemeBuffer + " </symbol>")
-            lexemeBuffer = ""
 
+        lexemeBuffer = ""
 
 
     elif lexemeBuffer == " ":
