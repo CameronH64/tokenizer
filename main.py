@@ -29,8 +29,6 @@ PSEUDOCODE:
 symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
 keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
             'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
-special = ['&lt;', '&gt;', '&quot;', '&amp;']
-# Use dictionary for this?
 
 position = 0
 lexemeBuffer = ""
