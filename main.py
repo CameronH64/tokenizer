@@ -20,27 +20,30 @@ PSEUDOCODE:
 
 """
 
-# Character read code learned and adapted from these sites:
+# Character read and write code learned and adapted from these sites:
 # https://www.geeksforgeeks.org/python-program-to-read-character-by-character-from-a-file/
 # https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files
 # https://www.quora.com/How-do-you-check-for-end-of-file-in-Python
-
+# https://www.guru99.com/reading-and-writing-files-in-python.html#6
 
 symbolsList = ['(', ')', '[', ']', '{', '}', ',', ';', '=', '.', '+', '-', '*', '/', '&', '|', '~', '<', '>']
 keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'char', 'void', 'var', 'static',
             'field', 'let', 'do', 'if', 'else', 'while', 'return', 'true', 'false', 'null', 'this']
 
-position = 0
+position = - 1
 lexemeBuffer = ""
 
 f = open("Main.jack")
 # f = open("SquareGame.jack")
 jackText = f.read()
-# jackText += " "  # FOR DEBUGGING.
 
-print("<tokens>")
+file = open("MainT.xml", "w+")
 
-while position < len(jackText) - 1:  # While you haven't reached the end of the file.
+
+# print("<tokens>")
+file.write("<tokens>\n")
+
+while position < len(jackText) - 2:  # While you haven't reached the end of the file.
 
     position += 1  # Load the next character into the lexemeBuffer.
     lexemeBuffer += jackText[position]  # Append to the currentLexeme so the currentLexeme can be checked.
@@ -73,10 +76,10 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
         # MUST be division symbol
         elif jackText[position + 1] == " ":
-            # lexemeBuffer += jackText[position]
-
-            print("<symbol> " + lexemeBuffer + " </symbol>")
+            # print("<symbol> " + lexemeBuffer + " </symbol>")
+            file.write("<symbol> " + lexemeBuffer + " </symbol>\n")
             position += 1
+
         lexemeBuffer = ""
 
 
@@ -94,10 +97,12 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer += jackText[position]
 
         if lexemeBuffer in keywords:
-            print("<keyword> " + lexemeBuffer + " </keyword>")
+            # print("<keyword> " + lexemeBuffer + " </keyword>")
+            file.write("<keyword> " + lexemeBuffer + " </keyword>\n")
             lexemeBuffer = ""
         else:
-            print("<identifier> " + lexemeBuffer + " </identifier>")
+            # print("<identifier> " + lexemeBuffer + " </identifier>")
+            file.write("<identifier> " + lexemeBuffer + " </identifier>\n")
             lexemeBuffer = ""
 
 
@@ -112,8 +117,8 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
 
         position += 1
         lexemeBuffer += jackText[position]
-        print("<stringConstant> " + lexemeBuffer + " </stringConstant>")
-
+        # print("<stringConstant> " + lexemeBuffer[1:-1] + "  </stringConstant>")
+        file.write("<stringConstant> " + lexemeBuffer[1:-1] + "  </stringConstant>\n")
         lexemeBuffer = ""
 
 
@@ -124,7 +129,8 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
             lexemeBuffer += jackText[position]
             position += 1
 
-        print("<integerConstant> " + lexemeBuffer + " </integerConstant>")
+        # print("<integerConstant> " + lexemeBuffer + " </integerConstant>")
+        file.write("<integerConstant> " + lexemeBuffer + " </integerConstant>\n")
 
         lexemeBuffer = ""
 
@@ -132,22 +138,27 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
     elif lexemeBuffer in symbolsList:
 
         if lexemeBuffer == "<":
-            print("<symbol> &lt; </symbol>")
+            # print("<symbol> &lt; </symbol>")
+            file.write("<symbol> &lt; </symbol>\n")
 
 
         elif lexemeBuffer == ">":
-            print("<symbol> &gt; </symbol>")
+            # print("<symbol> &gt; </symbol>")
+            file.write("<symbol> &gt; </symbol>\n")
 
 
         elif lexemeBuffer == "\"":
-            print("<symbol> &quot; </symbol>")
+            # print("<symbol> &quot; </symbol>")
+            file.write("<symbol> &quot; </symbol>\n")
 
 
         elif lexemeBuffer == "&":
-            print("<symbol> &amp; </symbol>")
+            # print("<symbol> &amp; </symbol>")
+            file.write("<symbol> &amp; </symbol>\n")
 
         else:
-            print("<symbol> " + lexemeBuffer + " </symbol>")
+            # print("<symbol> " + lexemeBuffer + " </symbol>")
+            file.write("<symbol> " + lexemeBuffer + " </symbol>\n")
 
         lexemeBuffer = ""
 
@@ -162,6 +173,7 @@ while position < len(jackText) - 1:  # While you haven't reached the end of the 
     else:
         continue
 
-print("</tokens>")
+# print("</tokens>")
+file.write("</tokens>\n")
 exit()
 
