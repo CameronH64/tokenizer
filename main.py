@@ -33,11 +33,13 @@ keywords = ['class', 'constructor', 'method', 'function', 'int', 'boolean', 'cha
 position = - 1
 lexemeBuffer = ""
 
-f = open("Main.jack")
-# f = open("SquareGame.jack")
-jackText = f.read()
+# f = open("Main.jack")                 # Open a file to read.
+f = open("SquareGame.jack")
 
-file = open("MainT.xml", "w+")
+jackText = f.read()                     # Read that file.
+
+# file = open("MainT.xml", "w+")        # Write it to a new .xml file.
+file = open("SquareGameT.xml", "w+")
 
 
 # print("<tokens>")
